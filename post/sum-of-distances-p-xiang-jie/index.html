@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>Sum Of Distances P详解 | 梦幻之音的小站</title>
+<meta name="description" content="梦幻之音的个人博客网站">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://codebotanist.github.io//favicon.ico?v=1693625681162">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://codebotanist.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://codebotanist.github.io/">
+        <img class="avatar" src="https://codebotanist.github.io//images/avatar.png?v=1693625681162" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://codebotanist.github.io/">
+        <h1 class="site-title">梦幻之音的小站</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+        
+          <a href="/team/application" class="menu purple-link">
+            团队
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Sum Of Distances P详解</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2023-08-29</span>
+            
+          </div>
+          <div class="post-content" v-pre>
+            <p>首先，我们对某个 K 元组的最短距离做出一个观察。K 元组 (j1, j2, …, jk) 的距离为 d，如果在每个图 Gi 中，存在一条恰好长度为 d 的步行路径以 ji 结尾。为了使用这个观察，我们进一步利用关于可以以某个顶点为终点的步长的更多结构。如果在 Gi 中存在以 ji 结尾的长度为 x 的步行路径，那么我们知道还可以有长度为 x、x+2、x+4 等的步行路径，因为可以重复地从 ji 往外走一步然后再往 ji 走一步。</p>
+<p>此外，如果 eveni[v] 表示在 Gi 中以 v 为终点的最短偶数长度路径的长度，odd[i][v] 表示奇数最短路径，那么 v 的有效距离是 {eveni[v], eveni[v]+2, eveni[v]+4, ...} 和 {oddi[v], oddi[v]+2, oddi[v]+4, ...} 的并集。（如果不存在偶数路径或奇数路径，则忽略相应的集合。）我们可以通过创建一个重复的图（一个表示奇数，一个表示偶数，两者之间有边相连）并使用 BFS 来计算 eveni[v] 和 oddi[v]。</p>
+<p>现在，我们想要利用这个结构来计算所有距离的和。核心问题是，对于某个 K 元组，最小可能距离是多少。如果我们决定这个距离是偶数（并且每个节点在元组中都有偶数路径），那么距离就是元组中最大的 eveni[v]。更具体地说，我们将这些元组的距离之和表示为 compute_sum(Leven)，其中 Leven 包含一个列表，其中包含每个节点的 eveni[v] 和相应的图（如果有偶数路径）。然后，compute_sum 计算所有有效元组的最大值之和。（同样地，如果我们决定这个距离是奇数，类似地执行相同的计算。）</p>
+<p>但是对于一个元组来说，决定是偶数还是奇数是困难的。相反，我们可以立即计算 compute_sum(Leven) + compute_sum(Lodd)。如果整个元组可以使用偶数路径或奇数路径，那么我们对该元组的答案进行了过多的计数，计数多了恰好是较大的数量（例如，如果奇数对该元组而言是更差的决定，那么元组中最大的 oddi[v] 就是过多计数的部分）。最后，我们可以通过减去 compute_sum(Lmax) 来纠正这一点，其中 Lmax 表示一个列表，其中包含具有偶数路径和奇数路径的相应节点的 max(eveni[v], oddi[v])。</p>
+<p>现在，剩下的就是如何为某个列表 L 计算 compute_sum(L)。一种方法是计算最大值 ≤ x 的元组数 less[x]，然后答案是 ∑i(less[i]−less[i−1])×i。要计算 less[x]，我们注意到这等于所有 i 下的 cnti[x] 的乘积，其中 cnti[x] 表示来自图 i 的值 ≤ x 的节点数。直接计算这个过程会太慢，但我们可以进行优化。</p>
+<p>对于每个图 Gi，我们对所有 x&lt;2Ni 计算 cnti[x]。对于所有更大的 x，cnti[x]=cnti[2Ni−1]。为了实现这一点，我们维护一个后缀乘积数组（类似于前缀和数组，但用于后缀和乘法），suffix_prod，并修改它，以便以 2Ni 开头的后缀中的所有元素都乘以 cnti[2Ni−1]。对于 cnti 的 2Ni 个值，我们可以类似地有一个数组 prefix_prod，将 prefix_prod[x] 乘以 cnti[x]。然后，我们最终可以计算 less[x]，表示为 prefix_prod[x]×suffix_prod[x]。这在线性时间内运行，所以总体上我们的算法的运行时间为 O(∑Ni+∑Mi)。</p>
+<p>也可以使用线段树或模数逆元来计算 compute_sum(L)。</p>
+<pre><code class="language-cpp">#include&lt;bits/stdc++.h&gt;
+#define mo 1000000007
+#define ll long long 
+#define INF 0x3f3f3f3f3f3f3f3f
+
+using namespace std;
+
+struct node {
+	int to, nxt;
+}e[800001];
+int k, n[50001], m[50001], count[500001], mxn[50001];
+int le[200001], KK, x, y, dis[200001], cnt[500001];
+int nmb[200001];
+vector &lt;ll&gt; minn[50001][2];
+vector &lt;pair&lt;int, int&gt; &gt; tong[400001];
+bool in[200001];
+ll ans;
+
+struct abab {
+	int x;
+};
+bool operator &lt;(abab x, abab y) {
+	return mxn[x.x] &gt; mxn[y.x];
+}
+priority_queue &lt;abab&gt; mg;
+
+void add(int x, int y) {
+	e[++KK] = (node){y, le[x]}; le[x] = KK;
+	e[++KK] = (node){x, le[y]}; le[y] = KK;
+}
+
+struct ztzt {
+	int dis, now;
+};
+bool operator &lt;(ztzt x, ztzt y) {
+	return x.dis &gt; y.dis;
+}
+priority_queue &lt;ztzt&gt; q;
+
+void dij(int x) {
+	while (!q.empty()) q.pop();
+	dis[0] = INF;
+	for (int i = 1; i &lt;= n[x]; i++) {
+		dis[i] = dis[i + n[x]] = INF;
+		in[i] = in[i + n[x]] = 0;
+	}
+	dis[1] = 0; q.push((ztzt){0, 1});
+	while (!q.empty()) {
+		int now = q.top().now;
+		q.pop();
+		if (in[now]) continue;
+		in[now] = 1;
+		for (int i = le[now]; i; i = e[i].nxt)
+			if (!in[e[i].to] &amp;&amp; dis[e[i].to] &gt; dis[now] + 1) {
+				dis[e[i].to] = dis[now] + 1;
+				q.push((ztzt){dis[e[i].to], e[i].to});
+			}
+	}
+}
+
+struct XDtree {
+	ll val[500001 &lt;&lt; 2];
+	
+	void clean() {
+		memset(val, 0, sizeof(val));
+	}
+	
+	void up(int now) {
+		val[now] = val[now &lt;&lt; 1] * val[now &lt;&lt; 1 | 1] % mo;
+	} 
+	
+	void insert(int now, int l, int r, int pl, int va) {
+		if (l == r) {
+			val[now] = (val[now] + va + mo) % mo;
+			return ;
+		}
+		
+		int mid = (l + r) &gt;&gt; 1;
+		if (pl &lt;= mid) insert(now &lt;&lt; 1, l, mid, pl, va);
+			else insert(now &lt;&lt; 1 | 1, mid + 1, r, pl, va);
+		
+		up(now); 
+	}
+	
+	ll query(int now, int l, int r, int L, int R) {
+		if (L &gt; R) return 1;
+		if (L &lt;= l &amp;&amp; r &lt;= R) {
+			return val[now];
+		}
+		
+		int mid = (l + r) &gt;&gt; 1;
+		ll re = 1;
+		if (L &lt;= mid) re = (re * query(now &lt;&lt; 1, l, mid, L, R)) % mo;
+		if (mid &lt; R) re = (re * query(now &lt;&lt; 1 | 1, mid + 1, r, L, R)) % mo;
+		return re;
+	}
+}T;
+
+ll get_max(int op) {
+	ans = 0; int maxn = -1;
+	for (int i = 1; i &lt;= k; i++)
+		for (int j = 0; j &lt; n[i]; j++) {
+			int vl = -1;
+			if (op == 1) vl = minn[i][0][j];
+				else if (op == 2) vl = minn[i][1][j];
+					else {
+						vl = max(minn[i][0][j], minn[i][1][j]);
+					}
+			if (vl == dis[0]) continue;
+			nmb[i]++;
+			tong[vl].push_back(make_pair(i, j));
+			maxn = max(maxn, vl);
+		}
+	
+	for (int i = 1; i &lt;= k; i++) {
+		T.insert(1, 1, k, i, nmb[i]);
+	}
+	for (int i = maxn; i &gt;= 1; i--) {
+		for (int j = 0; j &lt; tong[i].size(); j++) {
+			ans = (ans + i * (T.query(1, 1, k, 1, tong[i][j].first - 1) * T.query(1, 1, k, tong[i][j].first + 1, k) % mo) % mo) % mo;//剩余部分的乘积
+			T.insert(1, 1, k, tong[i][j].first, -1);//减少
+		}
+	}
+	
+	for (int i = 1; i &lt;= maxn; i++)
+		tong[i].clear();
+	T.clean();
+	memset(nmb, 0, sizeof(nmb));
+	return ans;
+}
+
+int main() {
+	cin&gt;&gt;k;
+	for (int i = 1; i &lt;= k; i++) {
+		cin&gt;&gt;n[i]&gt;&gt;m[i];
+		
+		KK = 0; for (int j = 1; j &lt;= 2 * n[i]; j++) le[j] = 0;
+		for (int j = 1; j &lt;= m[i]; j++) {
+			cin&gt;&gt;x&gt;&gt;y;
+			add(x, y + n[i]); add(x + n[i], y);
+		}
+		
+		dij(i);
+		for (int j = 1; j &lt;= n[i]; j++)
+			minn[i][0].push_back(dis[j]), minn[i][1].push_back(dis[j + n[i]]);
+	}
+	
+	cout&lt;&lt;(get_max(1) + get_max(2) - get_max(3) + mo) % mo;
+	
+	return 0;
+}
+</code></pre>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://codebotanist.github.io/post/phone-numbers-p-xiang-jie/">
+              <h3 class="post-title">
+                下一篇：Phone Numbers P详解
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+        
+          <div id="gitalk-container"></div>
+        
+
+        
+      
+
+      <div class="site-footer">
+  <div class="slogan">梦幻之音的个人博客网站</div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/CodeBotanist" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Andylegend9" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/andy-zhou-508" target="_blank">
+          <i class="fab fa-zhihu"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.facebook.com/profile.php?id=100093265311868" target="_blank">
+          <i class="fab fa-facebook"></i>
+        </a>
+      
+    
+  </div>
+  Powered by <a href="https://github.com/CodeBoanist" target="_blank">WPIO</a> | <a class="rss" href="https://codebotanist.github.io//atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'c3653c0e68cfa6af2b27',
+        clientSecret: 'c3b7c3c567dfca4324c07ff6c1d28478bf43bf37',
+        repo: 'codebotanist.github.io',
+        owner: 'CodeBotanist',
+        admin: ['CodeBotanist'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

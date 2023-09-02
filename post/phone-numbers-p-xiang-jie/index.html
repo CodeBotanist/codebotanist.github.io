@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>Phone Numbers P详解 | 梦幻之音的小站</title>
+<meta name="description" content="梦幻之音的个人博客网站">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://codebotanist.github.io//favicon.ico?v=1693625681162">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://codebotanist.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://codebotanist.github.io/">
+        <img class="avatar" src="https://codebotanist.github.io//images/avatar.png?v=1693625681162" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://codebotanist.github.io/">
+        <h1 class="site-title">梦幻之音的小站</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+        
+          <a href="/team/application" class="menu purple-link">
+            团队
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Phone Numbers P详解</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2023-08-29</span>
+            
+          </div>
+          <div class="post-content" v-pre>
+            <p>首先，我们考虑一个较简单的问题。假设我们的任务是验证某个字符串 T 是否可能是 Bessie 尝试输入的字符串，令 S 为输入字符串。</p>
+<p>我们可以使用简单的线性时间 DP 来解决这个简单的任务。逐个处理 T 的每个数字。假设一个数字字符串 s 可以被“重新排列”成 t，如果 Bessie 可以在尝试输入 s 的同时输入 t，令 dp[i] 为一个布尔值，如果 S[1⋯i] 可以被重新排列成 T[1⋯i]，则 dp[i] 为 True。我们的目标是检查是否 dp[N] = True，其中 N = |S|。注意，当且仅当对于某个 1≤j≤4，dp[i] = True，且子字符串 S[i−j+1⋯i] 可以被重新排列成 T[i−j+1⋯i] 时，dp[i] = True。为了检查这些大小最多为 4 的重新排列，我们只需检查子字符串 S[i−j+1⋯i] 和 T[i−j+1⋯i] 是否都是单个数字的排列，都是共享一侧的两个数字的排列，或者都是形成正方形的四个数字的排列。</p>
+<p>现在，解决原始问题的动机如下。假设我们列出所有长度为 i 的可能字符串（T1，T2，T3，⋯），并计算每个字符串的所有 dp 值，直到 dp[i]。然后，我们可以通过将每个长度为 9i 的字符串及其 dp 值复制 9 次，然后将这些副本中的每个副本与从 1 到 9 不同的数字一起继续，并最终使用先前的 dp[i] 值计算新的 9i+1 字符串的 dp[i+1]。然后，在最后，我们统计以 dp[N] = True 结尾的所有字符串。显然，这会给出正确的答案，但速度太慢。然而，正如我们接下来所展示的，我们可以模拟这个过程，只需要线性时间，因为没有必要写出所有的 dp 值和所有的字符串。为此，我们将不断改进这个极其缓慢的过程，直到可以在线性时间内完成。</p>
+<p>首先，在计算 dp[i] 后，我们可以放弃所有 j≥4 的 dp[i−j]。换句话说，我们可以继续计算长度为 N 的所有字符串的所有 dp 值，仅使用 dp 值 dp[i−j]，其中 0≤j≤3。通过观察我们最初用于检查一个字符串是否可以被重新排列成另一个字符串的 dp 算法，可以很容易地看出来，在计算 dp[i+1] 时，我们只需要 dp[i−j]，其中 j≤3。这样做可以节省大量时间，因为我们不再需要复制整个 dp 序列。</p>
+<p>接下来，通过相同的推理，注意我们不需要复制整个长度为 i 的字符串；我们只需要为每个 9i 字符串 T 复制最后的 3 个数字 T[i−2]、T[i−1]、T[i]。</p>
+<p>现在，如果我们要模拟最初描述的指数过程，它已经显著加速。我们仍然在每个时间步 i 创建 9i 个字符串和 dp 序列，但这些字符串和 dp 序列的长度是恒定的。</p>
+<p>此外，在任何时间点，如果某些字符串和 dp 序列肯定不会得到最终的 dp 值 N（例如，如果最近的 4 个记录的 dp 值为 False），则可以从列表中删除任何字符串和 dp 序列。</p>
+<p>以下是关键的洞察：现在，9i 个字符串和 dp 序列的长度是恒定的，不能存在超过恒定数量的不同（字符串，dp 序列）对。因此，我们不必把它们全部列出来，我们可以存储键值对，形式为 ((字符串，dp 序列)，计数)，其中计数表示与指定的字符串和 dp 序列相对应的原始指数过程中有多少个 9i 个字符串。因此，从 i 迁移到 i+1 可以在常数时间内完成，因为只有恒定数量的唯一（字符串，dp 序列）对。为了恢复最终的答案，我们将所有具有 dp[N] = True 的（字符串，dp 序列）对的计数相加。因此，现在可以在 O(N) 时间内完成原始问题，但常数因子很大。</p>
+<p>对于 N≤100，目前描述的算法的朴素实现已足够。此外，如果电话号码不包含某些数字，可以证明在每个时间步要跟踪的状态会更少，这可能允许朴素实现通过其中的一些子任务。</p>
+<pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+using ll = long long;
+
+using pi = pair&lt;int, int&gt;;
+#define mp make_pair
+#define f first
+#define s second
+
+using vi = vector&lt;int&gt;;
+#define sz(x) int((x).size())
+#define all(x) begin(x), end(x)
+#define sor(x) sort(all(x))
+#define pb push_back
+#define bk back()
+
+const int MOD = 1e9 + 7;
+
+template &lt;class T&gt; void remDup(vector&lt;T&gt; &amp;v) {
+  sort(all(v));
+  v.erase(unique(all(v)), end(v));
+}
+
+struct mi {
+  int v;
+  explicit operator int() const { return v; }
+  mi() : v(0) {}
+  mi(ll _v) : v(int(_v % MOD)) { v += (v &lt; 0) * MOD; }
+};
+mi &amp;operator+=(mi &amp;a, mi b) {
+  if ((a.v += b.v) &gt;= MOD)
+    a.v -= MOD;
+  return a;
+}
+mi operator+(mi a, mi b) { return a += b; }
+
+const int HASHMAX = 16 * 1000;
+struct Table {
+  mi vals[HASHMAX];
+  bitset&lt;HASHMAX&gt; visited;
+  vi keys;
+  void addTo(int key, mi v) {
+    if (visited[key] == 0) {
+      visited[key] = 1;
+      keys.pb(key);
+    }
+    vals[key] += v;
+  }
+  void reset() {
+    for (const auto &amp;u : keys) {
+      vals[u] = 0;
+      visited[u] = 0;
+    }
+    keys.clear();
+  }
+};
+
+vector&lt;vi&gt; good_subs;
+bool is_good_new_set[100005];
+
+void genGoodSubs() {
+  for (int i = 1; i &lt;= 9; i++) {
+    good_subs.pb({i});
+  }
+  for (int i = 1; i + 3 &lt;= 9; i++) {
+    good_subs.pb({i, i + 3});
+  }
+
+  for (int i = 1; i &lt;= 2; i++) {
+    for (int j = 0; j &lt;= 6; j += 3) {
+      int first_val = i + j;
+      good_subs.pb({first_val, first_val + 1});
+    }
+  }
+
+  for (int i = 1; i &lt;= 2; i++) {
+    for (int j = 0; j &lt;= 3; j += 3) {
+      vi v;
+      for (int k = 0; k &lt;= 1; k++) {
+        for (int l = 0; l &lt;= 3; l += 3) {
+          v.pb(i + j + k + l);
+        }
+      }
+      sor(v);
+      good_subs.pb(v);
+    }
+  }
+
+  for (auto u : good_subs) {
+    int mask = 0;
+    for (auto x : u) {
+      mask += 1 &lt;&lt; x;
+    }
+    is_good_new_set[mask] = 1;
+  }
+}
+
+void solve() {
+  string S_inp;
+  cin &gt;&gt; S_inp;
+  vi S{-100};
+  for (auto u : S_inp) {
+    S.pb(u - '0');
+  }
+
+  int N = sz(S) - 1;
+
+  vector&lt;vi&gt; S_masks = vector&lt;vi&gt;(N + 1, vi(5));
+  for (int i = 1; i &lt;= N; i++) {
+    for (int j = 0; j &lt;= 4; j++) {
+      for (int k = 0; k &lt;= j; k++) {
+        S_masks[i][j] |= (1 &lt;&lt; S[i + k]);
+      }
+    }
+  }
+
+  Table *dp = new Table();
+  Table *ndp = new Table();
+
+  dp-&gt;addTo(1 + 111 * 16, mi(1));
+
+  for (int i = 1; i &lt;= N; i++) {
+    vi cand_new_digs;
+    for (int j = -3; j &lt;= 3; j++) {
+      if (i + j &gt;= 1 &amp;&amp; i + j &lt;= N) {
+        cand_new_digs.pb(S[i + j]);
+      }
+    }
+    remDup(cand_new_digs);
+
+    ndp-&gt;reset();
+    for (auto u : dp-&gt;keys) {
+      int bars = u % 16;
+      int nums = u / 16;
+      int max_bars = 0;
+      for (int j = 0; j &lt; 4; j++) {
+        if ((bars &gt;&gt; j) &amp; 1) {
+          max_bars = j;
+        }
+      }
+      mi ways = dp-&gt;vals[u];
+      for (int new_dig : cand_new_digs) {
+        array&lt;int, 4&gt; all_nums_arr{new_dig, nums % 10, (nums / 10) % 10,
+                                   (nums / 100) % 10};
+        int new_bars = 0;
+        int bar_2_set = 0;
+        for (int old_bar = 0; old_bar &lt;= max_bars; old_bar++) {
+          int bar_2_set_dig = all_nums_arr[old_bar];
+          if ((bar_2_set &gt;&gt; bar_2_set_dig) &amp; 1) {
+            break;
+          } else {
+            bar_2_set |= 1 &lt;&lt; bar_2_set_dig;
+            if ((bars &gt;&gt; old_bar) &amp; 1) {
+              if ((bar_2_set &amp; S_masks[i - old_bar][3]) == bar_2_set) {
+                if (is_good_new_set[bar_2_set] &amp;&amp;
+                    bar_2_set == S_masks[i - old_bar][old_bar]) {
+                  new_bars |= 1;
+                }
+                if (old_bar &lt; 3) {
+                  new_bars |= 1 &lt;&lt; (old_bar + 1);
+                }
+              }
+            }
+          }
+        }
+        if (new_bars == 0)
+          continue;
+        for (int j = 3; j; --j) {
+          if (new_bars &amp; (1 &lt;&lt; j)) {
+            break;
+          }
+          all_nums_arr[j - 1] = 0;
+        }
+        int new_nums =
+            all_nums_arr[0] + 10 * all_nums_arr[1] + 100 * all_nums_arr[2];
+        ndp-&gt;addTo(new_bars + 16 * new_nums, ways);
+      }
+    }
+
+    swap(dp, ndp);
+  }
+
+  mi ans = 0;
+  for (int u : dp-&gt;keys) {
+    if (((u % 16) &gt;&gt; 0) &amp; 1) {
+      ans += dp-&gt;vals[u];
+    }
+  }
+
+  cout &lt;&lt; ans.v &lt;&lt; &quot;\n&quot;;
+}
+
+int main() {
+  cin.tie(0)-&gt;sync_with_stdio(0);
+  genGoodSubs();
+  int T;
+  cin &gt;&gt; T;
+  for (int t = 1; t &lt;= T; t++) {
+    solve();
+  }
+}
+</code></pre>
+
+          </div>
+        </div>
+
+        
+      </div>
+
+      
+        
+          <div id="gitalk-container"></div>
+        
+
+        
+      
+
+      <div class="site-footer">
+  <div class="slogan">梦幻之音的个人博客网站</div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/CodeBotanist" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Andylegend9" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/andy-zhou-508" target="_blank">
+          <i class="fab fa-zhihu"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.facebook.com/profile.php?id=100093265311868" target="_blank">
+          <i class="fab fa-facebook"></i>
+        </a>
+      
+    
+  </div>
+  Powered by <a href="https://github.com/CodeBoanist" target="_blank">WPIO</a> | <a class="rss" href="https://codebotanist.github.io//atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'c3653c0e68cfa6af2b27',
+        clientSecret: 'c3b7c3c567dfca4324c07ff6c1d28478bf43bf37',
+        repo: 'codebotanist.github.io',
+        owner: 'CodeBotanist',
+        admin: ['CodeBotanist'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

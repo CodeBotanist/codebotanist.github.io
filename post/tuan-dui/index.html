@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>团队 | 梦幻之音的小站</title>
+<meta name="description" content="梦幻之音的个人博客网站">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://codebotanist.github.io//favicon.ico?v=1693625681162">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://codebotanist.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://codebotanist.github.io/">
+        <img class="avatar" src="https://codebotanist.github.io//images/avatar.png?v=1693625681162" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://codebotanist.github.io/">
+        <h1 class="site-title">梦幻之音的小站</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+        
+          <a href="/team/application" class="menu purple-link">
+            团队
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">团队</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2023-09-02</span>
+            
+          </div>
+          <div class="post-content" v-pre>
+            <p>加入梦幻之音的团队，一起编程出一个成功的项目吧！<br>
+有意者，请确保你有一个邮箱，一个GitHub账号，一个QQ，一个熟练算法的大脑还有一个Git。请把你的信息发送到邮箱freshmentolegend@gmail.com，内容包括你的GitHub账号名，你熟悉的算法（如图论），你希望我们团队要创建的项目及理由，以及你的QQ号。发送之后的一个周末我将会来审核你的信息。然后我将会把团队邀请信息发送到你的GitHub上（请注意尽快收取并同意），并把你拉到我们的QQ群中。<br>
+本团队的加入纯属自愿，没有任何类似劳务报酬的东西。可以随时退出，不强求。</p>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://codebotanist.github.io/post/mowing-mischief-p-xiang-jie/">
+              <h3 class="post-title">
+                下一篇：Mowing Mischief P详解
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+        
+          <div id="gitalk-container"></div>
+        
+
+        
+      
+
+      <div class="site-footer">
+  <div class="slogan">梦幻之音的个人博客网站</div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/CodeBotanist" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Andylegend9" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/andy-zhou-508" target="_blank">
+          <i class="fab fa-zhihu"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.facebook.com/profile.php?id=100093265311868" target="_blank">
+          <i class="fab fa-facebook"></i>
+        </a>
+      
+    
+  </div>
+  Powered by <a href="https://github.com/CodeBoanist" target="_blank">WPIO</a> | <a class="rss" href="https://codebotanist.github.io//atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'c3653c0e68cfa6af2b27',
+        clientSecret: 'c3b7c3c567dfca4324c07ff6c1d28478bf43bf37',
+        repo: 'codebotanist.github.io',
+        owner: 'CodeBotanist',
+        admin: ['CodeBotanist'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

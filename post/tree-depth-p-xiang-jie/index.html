@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>Tree Depth P 详解 | 梦幻之音的小站</title>
+<meta name="description" content="梦幻之音的个人博客网站">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://codebotanist.github.io//favicon.ico?v=1693625681162">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://codebotanist.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://codebotanist.github.io/">
+        <img class="avatar" src="https://codebotanist.github.io//images/avatar.png?v=1693625681162" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://codebotanist.github.io/">
+        <h1 class="site-title">梦幻之音的小站</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+        
+          <a href="/team/application" class="menu purple-link">
+            团队
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Tree Depth P 详解</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2023-08-29</span>
+            
+          </div>
+          <div class="post-content" v-pre>
+            <p>对于 N≤20，任何合理的多项式时间解决方案都应该可行。一种可能的方法是在 O(N7) 时间内计算所有 n≤N，k≤(n2) 的结果。</p>
+<p>为了获得额外的分数，我们应该找到一种计算 di(a) 的方法，而不需要显式构建树。关键条件是如果 a[j]=min(a[i…j])，则 j 是 i 的祖先，因此得出</p>
+<p>di(a)=1+∑1≤j&lt;i(a[j]==min(a[j…i]))+∑i&lt;j≤n(a[j]==min(a[i…j]))。<br>
+让我们专注于计算满足 i&lt;j 的某对固定的 (i,j) 的情况下 a[j]==min(a[i…j]) 的排列数量 a。我们将一次只构建一个元素的 a。首先，我们从仅包含 a[i] 的序列开始。然后 a[i+1] 可以大于 a[i] 或小于 a[i]，贡献 0 或 1 个逆序。接着 a[i+2] 相对于 a[i] 和 a[i+1] 可以采用三种不同的值，贡献从 0 到 2 个逆序。以这种方式继续，子排列 a[i…j−1] 中可能的逆序数可以用多项式乘积表示为</p>
+<p>∏t=1j−i(∑u=0t−1xu)。<br>
+这被称为生成函数，因为我们正在使用多项式对序列进行编码。如果我们展开它并将具有相同 x 幂次的项分组在一起，那么形式为 cxd 的项表示恰好有 c 个逆序的排列。<br>
+添加 a[j] 不论 a[i…j−1] 有多少逆序，都会贡献 j−i 个逆序。然后我们应该添加排列的其余元素，每个元素可以放在排序顺序的任何位置。因此，最终结果由生成函数给出</p>
+<p>∏t=1n(∑u=0t−1xu)⋅1∑j−iu=0xu⋅xj−i。<br>
+这个乘积的第一部分不依赖于 i 或 j，我们可以使用前缀和在 O(N3) 时间内计算它。我们可以通过反转我们用于乘法的过程，在 O(N2) 时间内将其除以 ∑j−iu=0xu。<br>
+除法后，我们只需要 xk−(j−i) 的系数。由于乘积仅取决于 j−i，我们只需要进行 N 次不同的除法。或者，我们可以维护前缀和后缀乘积，无需进行除法。对于 i&gt;j，过程几乎完全相同，只是 a[j] 不会贡献逆序。</p>
+<p>整个解决方案在 O(N3) 时间内运行，占用 O(N2) 内存。以下是我的代码。事实证明 M 是否为素数是无关紧要的。</p>
+<pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+typedef long long ll;
+typedef vector&lt;int&gt; vi; 
+ 
+#define FOR(i,a,b) for (int i = (a); i &lt; (b); ++i)
+#define F0R(i,a) FOR(i,0,a)
+#define ROF(i,a,b) for (int i = (b)-1; i &gt;= (a); --i)
+#define R0F(i,a) ROF(i,0,a)
+#define trav(a,x) for (auto&amp; a: x)
+ 
+#define pb push_back
+#define rsz resize
+#define sz(x) int(x.size())
+ 
+void setIO(string name) {
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name+&quot;.in&quot;).c_str(),&quot;r&quot;,stdin);
+	freopen((name+&quot;.out&quot;).c_str(),&quot;w&quot;,stdout);
+}
+
+int MOD;
+int n,k;
+
+typedef int T;
+struct mi {
+	T val; 
+	mi() { val = 0; }
+	mi(const ll&amp; v) { 
+		val = (-MOD &lt;= v &amp;&amp; v &lt;= MOD) ? v : v % MOD;
+		if (val &lt; 0) val += MOD;
+	}
+	mi&amp; operator+=(const mi&amp; m) { 
+		if ((val += m.val) &gt;= MOD) val -= MOD; 
+		return *this; }
+	mi&amp; operator-=(const mi&amp; m) { 
+		if ((val -= m.val) &lt; 0) val += MOD; 
+		return *this; }
+};
+typedef vector&lt;mi&gt; vmi;
+ 
+void ad(vmi&amp; a, int b) {
+	a.rsz(sz(a)+b-1);
+	R0F(i,sz(a)-b) a[i+b] -= a[i];
+	FOR(i,1,sz(a)) a[i] += a[i-1];
+}
+void sub(vmi&amp; a, int b) {
+	ROF(i,1,sz(a)) a[i] -= a[i-1];
+	F0R(i,sz(a)-b) a[i+b] += a[i];
+	a.rsz(sz(a)-b+1); 
+}
+mi get(vmi&amp; a, int b) {
+	if (b &lt; 0 || b &gt;= sz(a)) return 0;
+	return a[b];
+}
+ 
+int main() {
+	setIO(&quot;treedepth&quot;); 
+	cin &gt;&gt; n &gt;&gt; k &gt;&gt; MOD;
+	vmi v = {1}; FOR(i,1,n+1) ad(v,i);
+	vmi ans(n,v[k]);
+	FOR(dif,1,n) {
+		sub(v,dif+1);
+		mi x = get(v,k-dif), y = get(v,k);
+		ad(v,dif+1);
+		F0R(a,n-dif) {
+			ans[a] += x;
+			ans[a+dif] += y;
+		}
+	}
+	F0R(i,n) cout &lt;&lt; ans[i].val &lt;&lt; ' ';
+}
+</code></pre>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://codebotanist.github.io/post/262144-revisited-p-xiang-jie/">
+              <h3 class="post-title">
+                下一篇：262144 Revisited P详解
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+        
+          <div id="gitalk-container"></div>
+        
+
+        
+      
+
+      <div class="site-footer">
+  <div class="slogan">梦幻之音的个人博客网站</div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/CodeBotanist" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Andylegend9" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/andy-zhou-508" target="_blank">
+          <i class="fab fa-zhihu"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.facebook.com/profile.php?id=100093265311868" target="_blank">
+          <i class="fab fa-facebook"></i>
+        </a>
+      
+    
+  </div>
+  Powered by <a href="https://github.com/CodeBoanist" target="_blank">WPIO</a> | <a class="rss" href="https://codebotanist.github.io//atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'c3653c0e68cfa6af2b27',
+        clientSecret: 'c3b7c3c567dfca4324c07ff6c1d28478bf43bf37',
+        repo: 'codebotanist.github.io',
+        owner: 'CodeBotanist',
+        admin: ['CodeBotanist'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

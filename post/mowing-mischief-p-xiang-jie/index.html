@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>Mowing Mischief P详解 | 梦幻之音的小站</title>
+<meta name="description" content="梦幻之音的个人博客网站">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://codebotanist.github.io//favicon.ico?v=1693625681162">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://codebotanist.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://codebotanist.github.io/">
+        <img class="avatar" src="https://codebotanist.github.io//images/avatar.png?v=1693625681162" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://codebotanist.github.io/">
+        <h1 class="site-title">梦幻之音的小站</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+        
+          <a href="/team/application" class="menu purple-link">
+            团队
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Mowing Mischief P详解</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2023-08-30</span>
+            
+          </div>
+          <div class="post-content" v-pre>
+            <p>让我们分解问题陈述。给定一个 2D 网格中的 N 个格点，我们希望找到一个最大长度的点序列 (xi, yi)ki=0，满足以下条件：</p>
+<p>0=x0&lt;x1&lt;⋯&lt;xk=T<br>
+和<br>
+0=y0&lt;y1&lt;⋯&lt;yk=T。<br>
+在所有这样的序列中，我们要找到以下表达式的最小可能值：<br>
+∑i=1k(xi−xi−1)(yi−yi−1)。<br>
+忽略第二个条件，观察最大长度 k（忽略初始点 (0,0)）是最长递增子序列的长度。令 l(x,y) 表示以点 (x,y) 结尾的最长递增子序列的长度。那么解决方案必须满足 l(xi,yi)=i，对于所有 1≤i≤k。</p>
+<p>令 L(i) 表示 l(x,y)=i 的点集合；我们将这个集合称为第 i 级。对于两个点 p=(xp,yp) 和 q=(xq,yq)，如果在两个坐标上都有 p&gt;q，则我们说 p 支配 q，记作 p≫q。令 dp(p) 表示任何以点 (xp,yp) 结尾的最大长度矩形序列的最小面积。那么对于任何 p∈L(i)，有：</p>
+<p>dp(p)=minq∈L(i−1)∣p≫q[dp(q)+(xp−xq)(yp−yq)]。<br>
+考虑任意的 q1、q2∈L(i−1)，其中 xq1&lt;xq2。由于 L(i−1) 是一个级别，yq1&gt;yq2。如果 p1、p2∈L(i)，满足 xp1&lt;xp2，并且 p1、p2≫q1、q2，可以验证如果 q1 对于 p1 更好，则 q1 对于 p2 也更好。</p>
+<p>在许多动态规划问题中，上述的单调性观察足以将 O(N) 的时间转换为 O(logN) 或均摊 O(1)。特别地，暂时假设上述 DP 转换没有条件 p≫q。那么 DP 转换可以通过分治或单调队列有效地计算，因为对于任何 q1、q2∈L(i−1)，当我们从左到右扫描 L(i) 时，最终 q1 会在 q2 之前成为更好的转换。</p>
+<p>然而，我们必须处理 p≫q 的条件。每个点 q∈L(i−1) 都有一些在 L(i) 中支配它的点的区间；称这个 q 的“相关区间”。随着 xq 的增加，相应的区间单调地向右移动。因此，问题是 q1 可能“超越” q2 成为最佳转换，但是然后 q1 的区间可能结束（在 q2 的区间结束之前），突然间 q2 再次成为最佳区间！</p>
+<p>直观上，问题在于我们不能轻松地处理在扫描 L(i) 时相关区间在中间开始和结束的情况。为了避免这些事件，我们想将 L(i) 划分为块，使得区间不会在块内部开始或结束。我们不能完全做到这一点：如果我们在每个区间开始或结束的点上都划分 L(i)，那么每个区间可能与 O(N) 个块相交。但是我们可以做到一半：将 L(i) 划分为块，使得没有区间在一个块内部既开始又结束，并且没有区间与超过 2 个块相交。</p>
+<p>让我们假设我们有这样的划分。我们如何使用它？固定一个块，并考虑与它相交的区间。它们分为两种类型：区间在块内结束，或在块内开始——但是关键是，不会同时发生。使用单调队列，我们可以从右到左扫描该块，并仅使用区间在块内结束的点 q∈L(i−1) 来高效地计算最佳转换。另外，我们可以从左到右扫描该块，并仅使用区间在块内开始的点来高效地计算最佳转换。然后对于块中的每个点，它的最终 DP 值是两个计算值的最小值。允许使用单调队列的关键点是点 q∈L(i−1) 逐个地在扫描进入它们的相关区间时变得相关，但它们永远不会变得无关。时间复杂度是 O((I+B)logB)，其中 B 是块的大小，I 是相交区间的数量；logB 因子是由于对于各种 q1、q2∈L(i−1)，确定 q1 “超越” q2 的位置。</p>
+<p>由于块是不相交的，每个区间最多与两个块相交，从级别 L(i−1) 过渡到级别 L(i) 的总体复杂度为 O(NlogN)，其中 N 是两个级别的总大小。</p>
+<p>剩下的是展示如何将 L(i) 划分为具有所需属性的块。这是相关区间单调性的简单结果。从左到右进行扫描，贪心地构建每个块，使其尽可能长，但不严格包含区间。显然，第一个属性得到满足：通过构造，没有区间在块内严格开始和结束。通过反证法证明第二个属性。假设某个区间与 3 个块相交；那么它严格包含一个块。但根据构造，这个块（不严格地）包含一些区间：否则它会更长！因此，这个区间嵌套在其他区间中，矛盾。这证明了所需的划分可以在线性时间内找到。</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;ctime&gt;
+#include &lt;vector&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+#define MAXN 300001
+#define INF 0x3f3f3f3f3f3f3f
+
+int N, L;
+int x[MAXN], y[MAXN];
+int xid[MAXN];
+int lis[MAXN];
+long long dp[MAXN];
+long long dpPlus[MAXN];
+
+vector&lt;int&gt; levels[MAXN];
+
+bool cmpx(int a,int b)	
+{
+	return x[a] &lt; x[b];
+}
+
+void computeLIS()
+{
+	levels[0].push_back(xid[0]);
+	lis[xid[0]] = 0;
+	int mx = 0;
+	for(int i=1;i&lt;N;i++)
+	{
+		int cur = xid[i];
+		int low = -1;
+		int high = mx;
+		while(low != high)
+		{
+			int mid = (low+high+1)/2;
+			if(y[levels[mid].back()] &lt; y[cur]) low = mid;
+			else high = mid-1;
+		}
+		levels[low+1].push_back(cur);
+		mx = max(mx, low+1);
+		lis[cur] = low+1;
+	}
+}
+
+long long cost(int i,int j)
+{
+	return dp[i] + x[i]*((long long)y[i]) - x[i]*((long long)y[j]) - y[i]*((long long)x[j]) + x[j]*((long long)y[j]);
+}
+
+int findLocOvertake(int l,int i,inlinet j) 
+{
+	int low = 0;
+	int high = levels[l].size();
+	while(low != high)
+	{
+		int mid = (low+high)/2;
+		if(cost(i, levels[l][mid]) &lt; cost(j, levels[l][mid])) high = mid;
+		else low = mid+1;
+	}
+	return low;
+}
+
+int firstDom[MAXN];
+int lastDom[MAXN];
+
+int findFirst(int l,int i)	
+{
+	int low = 0;
+	int high = levels[l].size()-1;
+	while(low != high)
+	{
+		int mid = (low + high)/2;
+		if(x[levels[l][mid]] &gt; x[i]) high = mid;
+		else low = mid+1;
+	}
+	if(x[levels[l][low]] &gt; x[i] &amp;&amp; y[levels[l][low]] &gt; y[i])
+		return low;
+	return -1;
+}
+
+int findLast(int l,int i) 
+{
+	int low = 0;
+	int high = levels[l].size()-1;
+	while(low != high)
+	{
+		int mid = (low + high + 1)/2;
+		if(y[levels[l][mid]] &gt; y[i]) low = mid;
+		else high = mid-1;
+	}
+	if(x[levels[l][low]] &gt; x[i] &amp;&amp; y[levels[l][low]] &gt; y[i])
+		return low;
+	return -1;
+}
+
+int que[MAXN];
+int overtake[MAXN];
+vector&lt;int&gt; level;
+
+void solveStartingRegion(int l, int iStart, int iEnd, int qStart, int qEnd) 
+{
+	int len = 0;
+	int i = iStart;
+	for(int j=qStart;j&lt;=qEnd;j++)
+	{
+		int q = levels[l+1][j];
+		while(i &lt;= iEnd &amp;&amp; firstDom[i] &lt;= j)
+		{
+			while(len &gt;= 2 &amp;&amp; overtake[len-2] &lt;= findLocOvertake(l+1, que[len-1], level[i]))
+				len--;
+			que[len] = level[i];
+			if(len &gt;= 1)
+				overtake[len-1] = findLocOvertake(l+1, que[len-1], level[i]);
+			len++;
+			i++;
+		}
+		while(len &gt;= 2 &amp;&amp; overtake[len-2] &lt;= j)
+			len--;
+		dp[q] = min(dp[q], cost(que[len-1], q));
+	}
+}
+
+void solveEndingRegion(int l, int iStart, int iEnd, int qStart, int qEnd)	
+{
+	int len = 0;
+	int i = iEnd;
+	for(int j=qEnd;j&gt;=qStart;j--)
+	{
+		int q = levels[l+1][j];
+		while(i &gt;= iStart &amp;&amp; lastDom[i] &gt;= j)
+		{
+			while(len &gt;= 2 &amp;&amp; overtake[len-2] &gt;= findLocOvertake(l+1, level[i], que[len-1]))
+				len--;
+			que[len] = level[i];
+			if(len &gt;= 1)
+				overtake[len-1] = findLocOvertake(l+1, level[i], que[len-1]);
+			len++;
+			i--;
+		}
+		while(len &gt;= 2 &amp;&amp; overtake[len-2] &gt; j)
+			len--;
+		dp[q] = min(dp[q], cost(que[len-1], q));
+	}
+}
+
+int main()
+{
+	cin &gt;&gt; N &gt;&gt; L;
+	for(int i=0;i&lt;N;i++)
+		cin &gt;&gt; x[i] &gt;&gt; y[i];
+	x[N] = y[N] = L;
+	N++;
+	for(int i=0;i&lt;N;i++)
+		dp[i] = INF, xid[i] = i;
+	
+	sort(xid,xid+N,cmpx);
+	
+	computeLIS();
+	for(int i=0;i&lt;levels[0].size();i++)
+	{
+		int cur = levels[0][i];
+		dp[cur] = x[cur]*((long long)y[cur]);
+	}
+	for(int l=0;levels[l+1].size()&gt;0;l++)
+	{
+		level.clear();
+		for(int i=0;i&lt;levels[l].size();i++)
+		{
+			int cur = levels[l][i];
+			int fd = findFirst(l+1, cur);
+			int ld = findLast(l+1, cur);
+			if(fd != -1)	
+			{
+				firstDom[level.size()] = fd;
+				lastDom[level.size()] = ld;
+				level.push_back(levels[l][i]);
+			}
+		}
+		for(int i=0;i&lt;level.size();)
+		{
+			int iEnd = i;
+			while(iEnd + 1 &lt; level.size() &amp;&amp; firstDom[iEnd + 1] &lt;= lastDom[i])
+				iEnd++;
+			solveStartingRegion(l, i, iEnd, firstDom[i], lastDom[i]);
+			if(lastDom[iEnd] &gt;= lastDom[i] + 1)
+				solveEndingRegion(l, i+1, iEnd, lastDom[i] + 1, lastDom[iEnd]);
+			i = iEnd + 1;
+		}
+	}
+	cout &lt;&lt; dp[N-1] &lt;&lt; '\n';
+}
+
+</code></pre>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://codebotanist.github.io/post/tree-depth-p-xiang-jie/">
+              <h3 class="post-title">
+                下一篇：Tree Depth P 详解
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+        
+          <div id="gitalk-container"></div>
+        
+
+        
+      
+
+      <div class="site-footer">
+  <div class="slogan">梦幻之音的个人博客网站</div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/CodeBotanist" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Andylegend9" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/andy-zhou-508" target="_blank">
+          <i class="fab fa-zhihu"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.facebook.com/profile.php?id=100093265311868" target="_blank">
+          <i class="fab fa-facebook"></i>
+        </a>
+      
+    
+  </div>
+  Powered by <a href="https://github.com/CodeBoanist" target="_blank">WPIO</a> | <a class="rss" href="https://codebotanist.github.io//atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'c3653c0e68cfa6af2b27',
+        clientSecret: 'c3b7c3c567dfca4324c07ff6c1d28478bf43bf37',
+        repo: 'codebotanist.github.io',
+        owner: 'CodeBotanist',
+        admin: ['CodeBotanist'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

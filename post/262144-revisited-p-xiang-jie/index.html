@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    
+<meta charset="utf-8" >
+
+<title>262144 Revisited P详解 | 梦幻之音的小站</title>
+<meta name="description" content="梦幻之音的个人博客网站">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://codebotanist.github.io//favicon.ico?v=1693625681162">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://codebotanist.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://codebotanist.github.io/">
+        <img class="avatar" src="https://codebotanist.github.io//images/avatar.png?v=1693625681162" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://codebotanist.github.io/">
+        <h1 class="site-title">梦幻之音的小站</h1>
+      </a>
+    </div>
+    <div class="right">
+      <transition name="fade">
+        <i class="icon" :class="{ 'icon-close-outline': menuVisible, 'icon-menu-outline': !menuVisible }" @click="menuVisible = !menuVisible"></i>
+      </transition>
+    </div>
+  </div>
+</div>
+
+<transition name="fade">
+  <div class="menu-container" style="display: none;" v-show="menuVisible">
+    <div class="menu-list">
+      
+        
+          <a href="/" class="menu purple-link">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="menu purple-link">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="menu purple-link">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="menu purple-link">
+            关于
+          </a>
+        
+      
+        
+          <a href="/team/application" class="menu purple-link">
+            团队
+          </a>
+        
+      
+    </div>
+  </div>
+</transition>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">262144 Revisited P详解</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon-calendar-outline"></i> 2023-08-29</span>
+            
+          </div>
+          <div class="post-content" v-pre>
+            <p>有注释，不写那么多啦</p>
+<pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
+#define int long long
+using namespace std;
+const int N = 3e5 + 10, M = 1e6 + 50;
+inline int read()
+{
+	int s = 0, w = 1;
+	char ch = getchar();
+	while(ch &lt; '0' || ch &gt; '9') { if(ch == '-') w *= -1; ch = getchar(); }
+	while(ch &gt;= '0' &amp;&amp; ch &lt;= '9') s = s * 10 + ch - '0', ch = getchar();
+	return s * w;
+}
+struct node{ //并查集 
+	int fa[N], siz[N];
+	inline void initial(int n){
+		for(register int i = 0; i &lt; n; i++) fa[i] = i, siz[i] = 1;
+	}
+	inline int find(int x) { return fa[x] == x ? x : fa[x] = find(fa[x]); }
+	inline void merge(int x, int y){
+		int fx = find(x), fy = find(y);
+		if(fx == fy) return; //已经合并过
+		if(siz[fx] &gt; siz[fy]) swap(fx, fy);
+		fa[fx] = fy, siz[fy] += siz[fx], siz[fx] = 0; 
+	}
+}T;
+int n, ans;
+int L[N], R[N], arr[N];
+set&lt;int&gt; s; //储存极值为 v 的极长子段 
+vector&lt;int&gt; vec[M];
+inline int Get_R(int x)
+{
+	if(x == n) return n;
+	return R[T.find(x)];
+}
+signed main()
+{
+	memset(L, -1, sizeof(L)), memset(R, -1, sizeof(R));
+	n = read();
+	for(register int i = 0; i &lt; n; i++) arr[i] = read();
+	for(register int i = 0; i &lt; n; i++) vec[arr[i]].push_back(i); 
+	T.initial(n);
+	//M -&gt; 最大值，值的极限 
+	for(register int v = 1; v &lt;= M - 1; v++){
+		vector&lt;int&gt; ed, tem;
+		int res = 0; //记录有多少个值为 v 的区间 
+		for(register int x : s){ //遍历值为 v - 1 的极大区间的左端点 
+			int r = Get_R(x); //找到右端点 + 1
+			int nexr = max(r, r == n ? -1 : Get_R(r)); //倍增标记是否触底 
+			if(nexr == r) ed.push_back(x); //为末端区间
+			else{
+				if(L[nexr] != -1) ed.push_back(x); //被标记过，需要被合并
+				else L[nexr] = x, tem.push_back(nexr); //未被标记过，标记 
+				res += (nexr - r) * T.siz[T.find(x)], R[T.find(x)] = nexr;
+			}
+		}
+		for(register int x : ed){ //合并 
+			s.erase(x);
+			if(L[Get_R(x)] == -1) L[Get_R(x)] = x; 
+			else T.merge(L[Get_R(x)], x);
+		}
+		for(register int x : tem) L[x] = -1; //清空标记 
+		for(register int x : vec[v]){ //放入 arr[x] = v 的 x  
+			++res, R[x] = (x + 1), s.insert(x);
+			if(L[x] != -1) s.insert(L[x]);
+			L[x] = -1; //清空标记 
+		}
+		ans = ans + res * v;
+	}
+	printf(&quot;%lld\n&quot;, ans);
+	return 0;
+}
+</code></pre>
+
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="https://codebotanist.github.io/post/sum-of-distances-p-xiang-jie/">
+              <h3 class="post-title">
+                下一篇：Sum Of Distances P详解
+              </h3>
+            </a>
+          </div>
+          
+      </div>
+
+      
+        
+          <div id="gitalk-container"></div>
+        
+
+        
+      
+
+      <div class="site-footer">
+  <div class="slogan">梦幻之音的个人博客网站</div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/CodeBotanist" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+        <a href="https://twitter.com/Andylegend9" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+      
+    
+      
+    
+      
+        <a href="https://www.zhihu.com/people/andy-zhou-508" target="_blank">
+          <i class="fab fa-zhihu"></i>
+        </a>
+      
+    
+      
+        <a href="https://www.facebook.com/profile.php?id=100093265311868" target="_blank">
+          <i class="fab fa-facebook"></i>
+        </a>
+      
+    
+  </div>
+  Powered by <a href="https://github.com/CodeBoanist" target="_blank">WPIO</a> | <a class="rss" href="https://codebotanist.github.io//atom.xml" target="_blank">RSS</a>
+</div>
+
+
+    </div>
+    <script type="application/javascript">
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'c3653c0e68cfa6af2b27',
+        clientSecret: 'c3b7c3c567dfca4324c07ff6c1d28478bf43bf37',
+        repo: 'codebotanist.github.io',
+        owner: 'CodeBotanist',
+        admin: ['CodeBotanist'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
