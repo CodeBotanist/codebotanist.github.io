@@ -1,0 +1,176 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fools! | Daily Andy</title>
+<link rel="shortcut icon" href="https://codebotanist.github.io/favicon.ico?v=1712145999316">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://codebotanist.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Fools! | Daily Andy - Atom Feed" href="https://codebotanist.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="Today is April Fool's Day in China, which is the day can tell lies without any worries. I hate this day, everyone isn't ..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://codebotanist.github.io">
+  <img class="avatar" src="https://codebotanist.github.io/images/avatar.png?v=1712145999316" alt="">
+  </a>
+  <h1 class="site-title">
+    Daily Andy
+  </h1>
+  <p class="site-description">
+    Where shows my vulnerable which isn't even possible to show to my classmates.
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="https://codebotanist.github.io" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="https://codebotanist.github.io/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="https://codebotanist.github.io/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://www.github.com/CodeBotanist" target="_blank">
+          <i class="ri-github-line"></i>
+        </a>
+      
+    
+      
+        <a href="twitter.com/@andylegend9" target="_blank">
+          <i class="ri-twitter-line"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Fools!
+            </h2>
+            <div class="post-info">
+              <span>
+                2024-04-01
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>Today is April Fool's Day in China, which is the day can tell lies without any worries. I hate this day, everyone isn't trustable, I always trusts their words and I am always the &quot;Fool&quot;.</p>
+<p>No more these useless chats, let me tell you a really astonishing new. There are two couples in our class. The first couple is very &quot;brave&quot;, they do many things which a couple will do in front of us every day! That makes me very annoyed while the second couple interested me. The boy is one of my best friends, he is a little bit of naive. And the most interesting part of it is that the girl likes my friend, a lot! While my friend don't want to become so &quot;brave&quot; like the first couple do.</p>
+<p>I always tries to help them, while he always is so shy, I always push him to the girl.</p>
+<p>OK, that's it, that's me, Xenapher,  see you next time!</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://codebotanist.github.io/post/helloworld/">
+              <h3 class="post-title">
+                Hello Gridea! Hello Github! Hello my blog!
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Welcome To Daily Andy, where shows your real side
+  <a class="rss" href="https://codebotanist.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
